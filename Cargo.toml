@@ -1,11 +1,11 @@
 [package]
 name = "easy_color"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["flyinsky <flyinksy@gmail.com>"]
 license = "MIT OR Apache-2.0"
 keywords = ["color", "convert"]
-description = "This is a very simple and easy-to-use color conversion tool that can easily convert colors between Hex, RGB, RGBA, HSL, HSLA, HSV, and CMYK. And each type has its unique API, such as RGB can set color channels, RGBA can set transparency, HSL can set hue, saturation, and brightness, and so on."
+description = "A relatively universal color format conversion tool. that can convert between #RRGGBB, #RGB, #RRGGBBAA, hsl, hsla, hsv, cmyk."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
