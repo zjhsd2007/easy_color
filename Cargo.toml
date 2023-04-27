@@ -1,11 +1,11 @@
 [package]
 name = "easy_color"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["flyinsky <flyinksy@gmail.com>"]
 license = "MIT OR Apache-2.0"
 keywords = ["color", "convert"]
-description = "A relatively universal color format conversion tool. that can convert between #RRGGBB, #RGB, #RRGGBBAA, hsl, hsla, hsv, cmyk."
+description = "A very simple and easy-to-use color conversion tool"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
