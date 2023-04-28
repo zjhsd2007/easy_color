@@ -17,6 +17,13 @@ This is a very simple and easy-to-use color conversion tool that can easily conv
     
     let hex:Hex = hsl.into();
     assert_eq!(hex.to_string(), "#C2C1FF");
+
+    // mix two color
+    let hsl:HSL = (0,0,0).try_into().unwrap();
+    let rgba:RGBA = (255,255,255,1.0).try_into().unwrap();
+    rgba.mix(hsl, None).to_string(); // rgba(127,127,127,1.00)
+    rgba.mix(hsl, Some(0.35)).to_string(); // rgba(165,165,165,1.00)//!
+    hsl.mix(rgba, None).to_string(); // hsl(0,0%,50%)
  ```
 
  ### Hex

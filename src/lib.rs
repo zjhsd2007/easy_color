@@ -2,6 +2,7 @@
 //! And each type has its unique API, such as RGB can set color channels, RGBA can set transparency, HSL can set hue, saturation, and brightness, and so on.
 //! ### example:
 //! ```rust
+//! use easy_color::{RGBA, RGB, HSL, Hex, ColorMix};
 //! let hex:Hex = "#2bc48a".try_into().unwrap();
 //!
 //! let mut rgb:RGB = hex.into();
@@ -19,6 +20,14 @@
 //!
 //! let hex:Hex = hsl.into();
 //! assert_eq!(hex.to_string(), "#C2C1FF");
+//!
+//! // mix color
+//! let hsl:HSL = (0,0,0).try_into().unwrap();
+//! let rgba:RGBA = (255,255,255,1.0).try_into().unwrap();
+//! rgba.mix(hsl, None).to_string(); // rgba(127,127,127,1.00)
+//! rgba.mix(hsl, Some(0.35)).to_string(); // rgba(165,165,165,1.00)
+//! hsl.mix(rgba, None).to_string(); // hsl(0,0%,50%)
+//!
 //! ```
 mod cmyk;
 mod common;
@@ -109,5 +118,6 @@ mod tests {
 
         let cmyk: CMYK = rgba.into();
         assert_eq!(cmyk.to_string(), "cmyk(64,0,24,20)");
+
     }
 }

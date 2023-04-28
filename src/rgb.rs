@@ -1,5 +1,4 @@
 use crate::common::{calc_rgb_with_alpha, cmyk_to_rgb, hsl_to_rgb, hsv_to_rgb};
-use crate::traits::Color;
 use crate::{ColorError, Hex, CMYK, HSL, HSLA, HSV, RGBA};
 use std::fmt::{Display, Formatter};
 
@@ -149,14 +148,12 @@ impl RGB {
         self.b = blue.min(255);
         self
     }
-}
 
-impl Color for RGB {
-    fn is_dark(&self) -> bool {
+    pub fn is_dark(&self) -> bool {
         self.r as f32 * 0.299 + self.g as f32 * 0.587 + self.b as f32 * 0.114 < 192.0
     }
 
-    fn is_light(&self) -> bool {
+    pub fn is_light(&self) -> bool {
         !self.is_dark()
     }
 }

@@ -1,5 +1,4 @@
 use crate::common::process_hex;
-use crate::traits::Color;
 use crate::{ColorError, CMYK, HSL, HSLA, HSV, RGB, RGBA};
 use std::fmt::{Display, Formatter};
 /// Parse a hexadecimal string into a `Hex` object, which can be converted into `RGB`, `RGBA`, `HSL`, `HSLA`, `HSV`, and `CMYK` objects.
@@ -13,10 +12,20 @@ use std::fmt::{Display, Formatter};
 ///
 /// Convert hex to other types, such as:
 /// ```rust
-/// use easy_color::{ Hex, RGB };
+/// use easy_color::{ Hex, RGBA };
 /// let hex:Hex = "#FFDFAC".try_into().unwrap();
-/// let rgb:RGB = hex.into();
-/// assert_eq!(rgb.to_string(), "rgb(255,223,172)")
+/// let mut rgba:RGBA = hex.into();
+/// assert_eq!(rgba.to_string(), "rgba(255,223,172,1.00)");
+///
+/// rgba.set_alpha(0.5);
+/// let hex:Hex = rgba.into();
+/// let hex_str = hex.to_hex_alpha();
+/// assert_eq!(hex_str, "#FFDFAC7F");
+///
+/// let hex_str2 = hex.to_alpha_hex();
+/// assert_eq!(hex_str2, "#7FFFDFAC");
+///
+///
 /// ```
 #[derive(Debug, Default, PartialEq, Clone, Copy)]
 pub struct Hex {
@@ -144,15 +153,5 @@ impl Hex {
     pub fn to_alpha_hex(&self) -> String {
         let (r, g, b, a) = self.rgba;
         format!("#{:02X}{:02X}{:02X}{:02X}", (a * 255.0) as u8, r, g, b)
-    }
-}
-
-impl Color for Hex {
-    fn is_dark(&self) -> bool {
-        let rgb = RGB::from(*self);
-        rgb.is_dark()
-    }
-    fn is_light(&self) -> bool {
-        !self.is_dark()
     }
 }

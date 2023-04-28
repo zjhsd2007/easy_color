@@ -1,5 +1,4 @@
 use crate::common::{calc_rgb_with_alpha, rgb_to_hsv};
-use crate::traits::Color;
 use crate::{ColorError, Hex, CMYK, HSL, HSLA, RGB, RGBA};
 use std::fmt::{Display, Formatter};
 
@@ -148,16 +147,5 @@ impl HSV {
     pub fn set_value(&mut self, value: u32) -> &mut Self {
         self.v = value.min(100);
         self
-    }
-}
-
-impl Color for HSV {
-    fn is_dark(&self) -> bool {
-        let rgb = RGB::from(*self);
-        rgb.is_dark()
-    }
-
-    fn is_light(&self) -> bool {
-        !self.is_dark()
     }
 }

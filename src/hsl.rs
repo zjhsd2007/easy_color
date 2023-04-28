@@ -1,5 +1,4 @@
 use crate::common::rgb_to_hsl;
-use crate::traits::Color;
 use crate::{ColorError, Hex, CMYK, HSLA, HSV, RGB, RGBA};
 use std::fmt::{Display, Formatter};
 
@@ -142,16 +141,5 @@ impl HSL {
     pub fn set_lightness(&mut self, lightness: u32) -> &mut Self {
         self.l = lightness.min(100);
         self
-    }
-}
-
-impl Color for HSL {
-    fn is_dark(&self) -> bool {
-        let rgb = RGB::from(*self);
-        rgb.is_dark()
-    }
-
-    fn is_light(&self) -> bool {
-        !self.is_dark()
     }
 }

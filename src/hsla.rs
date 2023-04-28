@@ -1,5 +1,4 @@
 use crate::common::{rgb_to_hsl, rgba_to_hsla};
-use crate::traits::Color;
 use crate::{ColorError, Hex, CMYK, HSL, HSV, RGB, RGBA};
 use std::fmt::{Display, Formatter};
 use std::ops::{Deref, DerefMut};
@@ -152,16 +151,5 @@ impl HSLA {
     pub fn set_alpha(&mut self, alpha: f32) -> &mut Self {
         self.a = alpha.max(0.0).min(1.0);
         self
-    }
-}
-
-impl Color for HSLA {
-    fn is_dark(&self) -> bool {
-        let rgb = RGB::from(*self);
-        rgb.is_dark()
-    }
-
-    fn is_light(&self) -> bool {
-        !self.is_dark()
     }
 }

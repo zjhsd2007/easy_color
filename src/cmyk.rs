@@ -1,5 +1,4 @@
 use crate::common::{calc_rgb_with_alpha, rgb_to_cmyk};
-use crate::traits::Color;
 use crate::{ColorError, Hex, HSL, HSLA, HSV, RGB, RGBA};
 use std::fmt::{Display, Formatter};
 
@@ -163,16 +162,5 @@ impl CMYK {
     pub fn set_black(&mut self, black: u8) -> &mut Self {
         self.m = black.min(100);
         self
-    }
-}
-
-impl Color for CMYK {
-    fn is_dark(&self) -> bool {
-        let rgb = RGB::from(*self);
-        rgb.is_dark()
-    }
-
-    fn is_light(&self) -> bool {
-        !self.is_dark()
     }
 }

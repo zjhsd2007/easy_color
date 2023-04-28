@@ -1,5 +1,4 @@
 use crate::common::hsl_to_rgb;
-use crate::traits::Color;
 use crate::{ColorError, Hex, CMYK, HSL, HSLA, HSV, RGB};
 use std::fmt::{Display, Formatter};
 use std::ops::{Deref, DerefMut};
@@ -92,7 +91,7 @@ impl From<Hex> for RGBA {
 impl From<RGB> for RGBA {
     fn from(rgb: RGB) -> Self {
         Self {
-            rgb: rgb.clone(),
+            rgb,
             a: 1.0,
         }
     }
@@ -157,15 +156,33 @@ impl RGBA {
         self.a = alpha.max(0.0).min(1.0);
         self
     }
-}
 
-impl Color for RGBA {
-    fn is_dark(&self) -> bool {
-        let rgb = RGB::from(*self);
-        rgb.is_dark()
-    }
-
-    fn is_light(&self) -> bool {
-        !self.is_dark()
+    /// mix color
+    /// ### Arguments
+    /// *other - any struct that impl into RGBA
+    /// *weight: Option<f32> the mixed color`s weight
+    /// ### Example
+    /// ```rust
+    /// use easy_color::{HSL, RGBA, ColorMix};
+    /// let hsl:HSL = (0,0,0).try_into().unwrap();
+    /// let rgba:RGBA = (255,255,255,1.0).try_into().unwrap();
+    /// rgba.mix(hsl, None).to_string(); // rgba(127,127,127,1.00)
+    /// rgba.mix(hsl, Some(0.35)).to_string(); // rgba(165,165,165,1.00)
+    /// hsl.mix(rgba, None).to_string(); // hsl(0,0%,50%)
+    /// ```
+    ///
+    pub fn mix(&self, other: impl Into<Self>, weight:Option<f32>) -> Self {
+        let rgba:RGBA = other.into();
+        let p = weight.unwrap_or(0.5);
+        let w = 2.0 * p - 1.0;
+        let a = rgba.a - self.a;
+        let w1 = if w * a == -1.0 { (w + 1.0) / 2.0 } else {  ((w + a) / (1.0 + w * a) + 1.0) / 2.0};
+        let w2 = 1.0 - w1;
+        let r = (w1 * rgba.r as f32 + w2 * self.r as f32) as u8;
+        let g = (w1 * rgba.g as f32 + w2 * self.g as f32) as u8;
+        let b = (w1 * rgba.b as f32 + w2 * self.b as f32) as u8;
+        let a = rgba.a * p + self.a * (1.0 - p);
+        let rgb:RGB = (r,g,b).try_into().unwrap();
+        Self {rgb,a}
     }
 }
