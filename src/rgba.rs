@@ -159,8 +159,8 @@ impl RGBA {
 
     /// mix color
     /// ### Arguments
-    /// *other - any struct that impl into RGBA
-    /// *weight: Option<f32> the mixed color`s weight
+    /// * other - any struct that impl into RGBA
+    /// * weight: Option<f32> the mixed color`s weight
     /// ### Example
     /// ```rust
     /// use easy_color::{HSL, RGBA, ColorMix};
@@ -184,5 +184,66 @@ impl RGBA {
         let a = rgba.a * p + self.a * (1.0 - p);
         let rgb:RGB = (r,g,b).try_into().unwrap();
         Self {rgb,a}
+    }
+
+
+    /// fade color
+    /// * ratio:f32 - the ratio of fading, a value between 0.0 and 1.0
+    ///
+    /// This method reduces the alpha value of the color by the given ratio, making it more transparent.
+    /// The resulting alpha value is clamped between 0.0 and 1.0.
+    /// ``` rust
+    /// use easy_color::RGBA;
+    /// let mut rgba:RGBA = (255,255,255,0.8).try_into().unwrap();
+    /// rgba.fade(0.5);
+    /// assert_eq!(rgba.to_string(), "rgba(255,255,255,0.40)");
+    /// ```
+    pub fn fade(&mut self, ratio:f32) -> &mut Self {
+        self.a = (self.a - self.a * ratio).max(0.0).min(1.0);
+        self
+    }
+
+    /// Increase or decrease the opacity of the color by the given ratio, making it more or less opaque.
+    /// The resulting alpha value is clamped between 0.0 and 1.0.
+    /// * ratio:f32 - the ratio of opacity change, a positive value increases opacity, a negative value decreases opacity.
+    ///
+    /// ``` rust
+    /// use easy_color::RGBA;
+    /// let mut rgba:RGBA = (255,255,255,0.8).try_into().unwrap();
+    /// rgba.opaquer(0.2);
+    /// assert_eq!(rgba.to_string(), "rgba(255,255,255,0.96)");
+    /// ```
+    pub fn opaquer(&mut self, ratio:f32) -> &mut Self {
+        self.a = (self.a + self.a * ratio).max(0.0).min(1.0);
+        self
+    }
+
+
+    /// Returns the grayscale mode of the color
+    /// ``` rust
+    /// use easy_color::RGBA;
+    /// let rgba:RGBA = (95,45,155,0.8).try_into().unwrap();
+    /// let gray = rgba.grayscale();
+    /// assert_eq!(gray.to_string(), "rgba(72,72,72,0.80)");
+    /// ```
+    pub fn grayscale(&self) -> Self {
+        let v = (self.r as f32 * 0.3 + self.g as f32 * 0.59 + self.b as f32 * 0.11) as u8;
+        (v,v,v, self.a).try_into().unwrap()
+    }
+
+    /// Invert color
+    /// ```rust
+    /// use easy_color::RGBA;
+    /// let rgba:RGBA = (95,45,155,0.8).try_into().unwrap();
+    /// let inverted = rgba.negate();
+    /// assert_eq!(inverted.to_string(), "rgba(160,210,100,0.80)");
+    /// ```
+    pub fn negate(&self) -> Self {
+        let RGB {mut r, mut g, mut b} = self.rgb;
+        r = 255 - r;
+        g = 255 - g;
+        b = 255 - b;
+        let rgb:RGB = (r,g,b).try_into().unwrap();
+        Self { rgb, a:self.a}
     }
 }

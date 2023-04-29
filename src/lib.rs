@@ -119,5 +119,8 @@ mod tests {
         let cmyk: CMYK = rgba.into();
         assert_eq!(cmyk.to_string(), "cmyk(64,0,24,20)");
 
+        let a:Hex = "#1f883d".try_into().unwrap();
+        dbg!(a.grayscale().to_string());
+
     }
 }

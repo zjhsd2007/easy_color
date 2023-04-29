@@ -44,8 +44,6 @@ This is a very simple and easy-to-use color conversion tool that can easily conv
     let _hsv:HSV = hex.into();
     let _cmyk:CMYK = hex.into();
 
-    hex.is_dark() // bool
-    hex.is_light() // bool
 ```
 
 ### RGB
@@ -69,7 +67,6 @@ RGB can be parsed from a string in the format "rgb(r,g,b)" or from a tuple (r,g,
     let _hsv:HSV = rgb.into();
     let _cmyk:CMYK = rgb.into();
 
-rgb.is_dark() // bool
 ```
 
 ### RGBA
@@ -153,3 +150,13 @@ CMYK can be parsed from a string in the format "cmyk(c,m,y,k)" or from a tuple (
     let hex:Hex = cmyk.into();
     assert_eq!(hex.to_string(), "#00684A");
 ```
+
+### Methods
+Each type of structure has the following methods:
+* fn is_dark(&self) -> bool;
+* fn is_light(&self) -> bool;
+* fn grayscale(&self) -> Self; 
+* fn negate(&self) -> Self;
+* fn mix(&self, other:T, weight:Option<f32>) -> Self;
+* fn darken(&mut self, ratio:f32) -> Self;
+* fn lighten(&mut self, ratio:f32) -> Self;

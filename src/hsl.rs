@@ -142,4 +142,63 @@ impl HSL {
         self.l = lightness.min(100);
         self
     }
+
+    /// Darkens the color by the given ratio.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `ratio` - A float value between 0 and 1 representing the amount to darken the color by.
+    /// 
+    /// # Example
+    /// 
+    /// ``` rust
+    /// use easy_color::HSL;
+    /// let mut color = HSL::try_from("hsl(120, 100%, 50%)").unwrap();
+    /// color.darken(0.2);
+    /// assert_eq!(color.to_string(), "hsl(120,100%,40%)");
+    /// ```
+    pub fn darken(&mut self, ratio:f32) -> &mut Self {
+        self.l = (self.l - (self.l as f32 * ratio) as u32).max(0).min(100);
+        self
+    }
+
+    /// Lightens the color by the given ratio.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `ratio` - A float value between 0 and 1 representing the amount to lighten the color by.
+    /// 
+    /// # Example
+    /// 
+    /// ```
+    /// use easy_color::HSL;
+    /// let mut color = HSL::try_from("hsl(120, 100%, 50%)").unwrap();
+    /// color.lighten(0.2);
+    /// assert_eq!(color.to_string(), "hsl(120,100%,60%)");
+    /// ```
+    pub fn lighten(&mut self, ratio:f32) -> &mut Self {
+        self.l = (self.l + (self.l as f32 * ratio) as u32).max(0).min(100);
+        self
+    }
+
+    /// Rotates the hue of the color by the given degrees.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `degrees` - An integer value representing the amount to rotate the hue by.
+    /// 
+    /// # Example
+    /// 
+    /// ``` rust
+    /// use easy_color::HSL;
+    /// let mut color = HSL::try_from("hsl(120, 100%, 50%)").unwrap();
+    /// color.rotate(60);
+    /// assert_eq!(color.to_string(), "hsl(180,100%,50%)");
+    /// ```
+    pub fn rotate(&mut self, degrees:i32) -> &mut Self {
+        let mut h = (self.h as i32 + degrees) % 360;
+        h = if h < 0 { 360 + h } else { h };
+        self.h = h as u32;
+        self
+    }
 }
