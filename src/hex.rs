@@ -25,7 +25,6 @@ use std::fmt::{Display, Formatter};
 /// let hex_str2 = hex.to_alpha_hex();
 /// assert_eq!(hex_str2, "#7FFFDFAC");
 ///
-///
 /// ```
 #[derive(Debug, Default, PartialEq, Clone, Copy)]
 pub struct Hex {

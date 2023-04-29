@@ -19,7 +19,6 @@ impl<T:Into<RGB>+Copy> Color for T {
 
 pub trait Grayscale {
     fn grayscale(&self) -> Self; 
-    fn negate(&self) -> Self;
 }
 
 impl<T: Into<RGBA> + From<RGBA> + Copy >  Grayscale for T {
@@ -27,7 +26,13 @@ impl<T: Into<RGBA> + From<RGBA> + Copy >  Grayscale for T {
         let rgba:RGBA=(*self).into();
         rgba.grayscale().into()
     }
-    
+}
+
+pub trait Negate {
+    fn negate(&self) -> Self;
+}
+
+impl<T: Into<RGBA> + From<RGBA> + Copy >  Negate for T {
     fn negate(&self) -> Self {
         let rgba:RGBA=(*self).into();
         rgba.negate().into()

@@ -24,6 +24,11 @@ This is a very simple and easy-to-use color conversion tool that can easily conv
     rgba.mix(hsl, None).to_string(); // rgba(127,127,127,1.00)
     rgba.mix(hsl, Some(0.35)).to_string(); // rgba(165,165,165,1.00)//!
     hsl.mix(rgba, None).to_string(); // hsl(0,0%,50%)
+
+    rgba.is_dark(); // false
+    rgba.is_light(); // true
+    rgba.fade(0.5); // rgba(255,255,255, 0.5)
+
  ```
 
  ### Hex
@@ -31,6 +36,14 @@ This is a very simple and easy-to-use color conversion tool that can easily conv
     let _hex:Hex = "#FAC".try_into().unwrap(); 
     let _hex:Hex = "#FFDFAC".try_into().unwrap();
     let _hex:Hex = "#FFDFACDC".try_into().unwrap() // hex with transparency
+
+    let rgba:RGBA = "rgba(255,223,172,0.85)".try_into().unwrap();
+    let hex:Hex = rgba.into();
+    let hex_str = hex.to_hex_alpha();
+    assert_eq!(hex_str, "#FFDFACD8");
+
+    let hex_str2 = hex.to_hex_alpha();
+    assert_eq!(hex_str, "#D8FFDFAC");
  ```
  Convert hex to other types, such as:
  ```rust
