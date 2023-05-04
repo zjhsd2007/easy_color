@@ -163,4 +163,12 @@ impl CMYK {
         self.m = black.min(100);
         self
     }
+
+    pub fn random() -> Self {
+        let c = rand::random::<u8>();
+        let m = rand::random::<u8>();
+        let y = rand::random::<u8>();
+        let k = rand::random::<u8>();
+        Self {c, m, y, k}
+    }
 }

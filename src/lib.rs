@@ -1,5 +1,5 @@
 //! This is a very simple and easy-to-use color conversion tool that can easily convert colors between Hex, RGB, RGBA, HSL, HSLA, HSV, and CMYK.
-//! And each type has its unique API, such as RGB can set color channels, RGBA can set transparency, HSL can set hue, saturation, and brightness, and so on.
+//! And each type has its unique API, such as RGB can set color channels, RGBA can set transparency, HSL can set hue, saturation, and brightness, etc.
 //! ### example:
 //! ```rust
 //! use easy_color::{RGBA, RGB, HSL, Hex, ColorMix};
@@ -28,6 +28,10 @@
 //! rgba.mix(hsl, Some(0.35)).to_string(); // rgba(165,165,165,1.00)
 //! hsl.mix(rgba, None).to_string(); // hsl(0,0%,50%)
 //!
+//! // creat random color
+//! let rgb = RGB::random();
+//! let rgba = RGBA::random();
+//! let hsl = HSL::random();
 //! ```
 mod cmyk;
 mod common;

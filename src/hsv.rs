@@ -1,6 +1,7 @@
 use crate::common::{calc_rgb_with_alpha, rgb_to_hsv};
 use crate::{ColorError, Hex, CMYK, HSL, HSLA, RGB, RGBA};
 use std::fmt::{Display, Formatter};
+use rand::Rng;
 
 /// HSV can be parsed from a string in the format "hsl(h, s%, v%)" or from a tuple (h,s,v).
 /// * h:u32 - Hue(0~360)
@@ -147,5 +148,13 @@ impl HSV {
     pub fn set_value(&mut self, value: u32) -> &mut Self {
         self.v = value.min(100);
         self
+    }
+
+    pub fn random() -> Self {
+        let mut rng = rand::thread_rng();
+        let h = rng.gen_range(0..=360) as u32;
+        let s = rng.gen_range(0..=100) as u32;
+        let v = rng.gen_range(0..=100) as u32;
+        Self {h, s, v}
     }
 }

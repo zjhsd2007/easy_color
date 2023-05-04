@@ -1,6 +1,7 @@
 use crate::common::rgb_to_hsl;
 use crate::{ColorError, Hex, CMYK, HSLA, HSV, RGB, RGBA};
 use std::fmt::{Display, Formatter};
+use rand::Rng;
 
 /// HSL can be parsed from a string in the format "hsl(h, s%, l%)" or from a tuple (h,s,l).
 /// * h:u32 - Hue(0~360)
@@ -200,5 +201,13 @@ impl HSL {
         h = if h < 0 { 360 + h } else { h };
         self.h = h as u32;
         self
+    }
+
+    pub fn random() -> Self {
+        let mut rng = rand::thread_rng();
+        let h = rng.gen_range(0..=360) as u32;
+        let s = rng.gen_range(0..=100) as u32;
+        let l = rng.gen_range(0..=100) as u32;
+        Self {h, s, l}
     }
 }

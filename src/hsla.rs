@@ -152,4 +152,11 @@ impl HSLA {
         self.a = alpha.max(0.0).min(1.0);
         self
     }
+
+    /// Generate HSLA, value is random
+    pub fn random() -> Self {
+        let hsl = HSL::random();
+        let a = (rand::random::<f32>() * 100.0_f32).round() / 100.0;
+        Self {hsl, a}
+    }
 }
