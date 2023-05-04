@@ -29,6 +29,10 @@ This is a very simple and easy-to-use color conversion tool that can easily conv
     rgba.is_light(); // true
     rgba.fade(0.5); // rgba(255,255,255, 0.5)
 
+    // creat random color
+    let rgb = RGB::random();
+    let rgba = RGBA::random();
+    let hsl = HSL::random();
  ```
 
  ### Hex
