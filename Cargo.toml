@@ -1,14 +1,12 @@
 [package]
 name = "easy_color"
-version = "0.1.8"
+version = "0.1.9"
 edition = "2021"
 authors = ["flyinsky <flyinksy@gmail.com>"]
 license = "MIT OR Apache-2.0"
 keywords = ["color", "convert"]
 description = "A very simple and easy-to-use color conversion tool"
 repository = "https://github.com/zjhsd2007/easy_color"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 rand = "0.8"

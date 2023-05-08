@@ -126,5 +126,6 @@ mod tests {
         let a:Hex = "#1f883d".try_into().unwrap();
         dbg!(a.grayscale().to_string());
 
+
     }
 }

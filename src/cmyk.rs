@@ -1,6 +1,7 @@
 use crate::common::{calc_rgb_with_alpha, rgb_to_cmyk};
 use crate::{ColorError, Hex, HSL, HSLA, HSV, RGB, RGBA};
 use std::fmt::{Display, Formatter};
+use rand::Rng;
 
 /// CMYK can be parsed from a string in the format "cmyk(c,m,y,k)" or from a tuple (c,m,y,k).
 /// * c:u8 - cyan value(0~100)
@@ -165,10 +166,11 @@ impl CMYK {
     }
 
     pub fn random() -> Self {
-        let c = rand::random::<u8>();
-        let m = rand::random::<u8>();
-        let y = rand::random::<u8>();
-        let k = rand::random::<u8>();
+        let mut rng = rand::thread_rng();
+        let c =  rng.gen_range(0..=100) as u8;
+        let m = rng.gen_range(0..=100) as u8;
+        let y = rng.gen_range(0..=100) as u8;
+        let k = rng.gen_range(0..=100) as u8;
         Self {c, m, y, k}
     }
 }
