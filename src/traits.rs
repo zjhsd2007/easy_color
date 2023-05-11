@@ -1,4 +1,4 @@
-use crate::{RGB, RGBA, HSL};
+use crate::{RGB, RGBA, HSL, Hex, HSLA, CMYK, HSV};
 
 pub trait Color {
     fn is_dark(&self) -> bool;
@@ -69,5 +69,75 @@ impl<T:Into<HSL> + From<HSL> + Copy> Lighten for T {
     fn lighten(&mut self, ratio:f32) -> Self {
         let mut hsl:HSL = (*self).into();
         (*hsl.lighten(ratio)).into()
+    }
+}
+
+pub trait IntoHex {
+    fn to_hex(&self) -> Hex;
+}
+
+impl<T:Into<Hex> + Copy> IntoHex for T {
+    fn to_hex(&self) -> Hex {
+        (*self).into()
+    }
+}
+
+pub trait IntoRGB {
+    fn to_rgb(&self) -> RGB;
+}
+
+impl<T:Into<RGB> + Copy> IntoRGB for T {
+    fn to_rgb(&self) -> RGB {
+        (*self).into()
+    }
+}
+
+pub trait IntoRGBA {
+    fn to_rgba(&self) -> RGBA;
+}
+
+impl<T:Into<RGBA> + Copy> IntoRGBA for T {
+    fn to_rgba(&self) -> RGBA {
+        (*self).into()
+    }
+}
+
+pub trait IntoHSL {
+    fn to_hsl(&self) -> HSL;
+}
+
+impl<T:Into<HSL> + Copy> IntoHSL for T {
+    fn to_hsl(&self) -> HSL {
+        (*self).into()
+    }
+}
+
+pub trait IntoHSLA {
+    fn to_hsla(&self) -> HSLA;
+}
+
+impl<T:Into<HSLA> + Copy> IntoHSLA for T {
+    fn to_hsla(&self) -> HSLA {
+        (*self).into()
+    }
+}
+
+pub trait IntoHSV {
+    fn to_hsv(&self) -> HSV;
+}
+
+impl<T:Into<HSV> + Copy> IntoHSV for T {
+    fn to_hsv(&self) -> HSV {
+        (*self).into()
+    }
+}
+
+pub trait IntoCMYK {
+    fn to_cmyk(&self) -> CMYK;
+}
+
+impl<T:Into<CMYK> + Copy> IntoCMYK for T {
+    fn to_cmyk(&self) -> CMYK {
+        (*self).into()
     }
 }

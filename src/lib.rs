@@ -3,22 +3,31 @@
 //! ### example:
 //! ```rust
 //! use easy_color::{RGBA, RGB, HSL, Hex, ColorMix};
+//! use crate::easy_color::{IntoRGB, IntoHex, IntoRGBA, IntoHSL, IntoHSLA, IntoHSV, IntoCMYK};
 //! let hex:Hex = "#2bc48a".try_into().unwrap();
 //!
 //! let mut rgb:RGB = hex.into();
+//! // or
+//! let mut rgb = hex.to_rgb();
 //! assert_eq!(rgb.to_string(), "rgb(43,196,138)");
 //! rgb.set_red(255);
 //! assert_eq!(rgb.to_string(), "rgb(255,196,138)");
 //!
 //! let mut rgba:RGBA = rgb.into();
+//! // or
+//! let mut rgba = rgb.to_rgba();
 //! rgba.set_alpha(0.5);
 //! assert_eq!(rgba.to_string(), "rgba(255,196,138,0.50)");
 //!
 //! let mut hsl:HSL = rgba.into();
+//! // or
+//! let mut hsl = rgba.to_hsl();
 //! hsl.set_hue(240);
 //! assert_eq!(hsl.to_string(), "hsl(240,100%,88%)");
 //!
 //! let hex:Hex = hsl.into();
+//! // or
+//! let hex = hsl.to_hex();
 //! assert_eq!(hex.to_string(), "#C2C1FF");
 //!
 //! // mix color
@@ -32,6 +41,9 @@
 //! let rgb = RGB::random();
 //! let rgba = RGBA::random();
 //! let hsl = HSL::random();
+//!
+//! let hex:Hex = "#2bc48a".try_into().unwrap();
+//! let hex_str = hex.to_rgb().set_blue(255).to_hsl().set_lightness(50).to_cmyk().set_cyan(100).to_hex().to_string(); // #00B5FF
 //! ```
 mod cmyk;
 mod common;
@@ -122,10 +134,6 @@ mod tests {
 
         let cmyk: CMYK = rgba.into();
         assert_eq!(cmyk.to_string(), "cmyk(64,0,24,20)");
-
-        let a:Hex = "#1f883d".try_into().unwrap();
-        dbg!(a.grayscale().to_string());
-
 
     }
 }
