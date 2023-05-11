@@ -1,5 +1,5 @@
 This is a very simple and easy-to-use color conversion tool that can easily convert colors between Hex, RGB, RGBA, HSL, HSLA, HSV, and CMYK. And each type has its unique API, such as RGB can set color channels, RGBA can set transparency, HSL can set hue, saturation, and brightness, etc.
- ```
+ ``` rust
     use easy_color::{RGBA, RGB, HSL, Hex, ColorMix};
     use crate::easy_color::{IntoRGB, IntoHex, IntoRGBA, IntoHSL, IntoHSLA, IntoHSV, IntoCMYK};
 
@@ -50,7 +50,7 @@ This is a very simple and easy-to-use color conversion tool that can easily conv
  ```
 
  ### Hex
- ```
+ ``` rust
     let _hex:Hex = "#FAC".try_into().unwrap(); 
     let _hex:Hex = "#FFDFAC".try_into().unwrap();
     let _hex:Hex = "#FFDFACDC".try_into().unwrap() // hex with transparency
@@ -64,7 +64,7 @@ This is a very simple and easy-to-use color conversion tool that can easily conv
     assert_eq!(hex_str, "#D8FFDFAC");
  ```
  Convert hex to other types, such as:
- ```
+ ``` rust
     let hex:Hex = "#FFDFAC".try_into().unwrap();
     let rgb:RGB = hex.into();
     assert_eq!(rgb.to_string(), "rgb(255,223,172)");
@@ -82,7 +82,7 @@ RGB can be parsed from a string in the format "rgb(r,g,b)" or from a tuple (r,g,
 * r:u8 - red value(0~255)
 * g:u8 - green value(0~255)
 * b:u8 - blue value(0~255)
-```
+``` rust
     let mut rgb:RGB = "rgb(43,196,138)".try_into().unwrap();
     rgb.set_green(255);
     assert_eq!(rgb.to_string(), "rgb(43,255,138)");
@@ -106,7 +106,7 @@ RGBA can be parsed from a string in the format "rgba(r,g,b,a)" or from a tuple (
 * g:u8 - green value(0~255)
 * b:u8 - blue value(0~255)
 * a:f32 - alpha(0~1)
-```
+``` rust
     let mut rgba:RGBA = "rgba(125,60,98,0.8)".try_into().unwrap();
     rgba.set_alpha(0.5);
     assert_eq!(rgba.to_string(), "rgba(125,60,98,0.50)");
@@ -122,7 +122,7 @@ HSL can be parsed from a string in the format "hsl(h, s%, l%)" or from a tuple (
 * h:u32 - Hue(0~360)
 * s:u32 - saturation(0~100)
 * l:u32 - lightness(0~100)
-```
+``` rust
     let mut hsl:HSL = "hsl(262,85%,79%)".try_into().unwrap();
     hsl.set_lightness(50);
     assert_eq!(hsl.to_string(), "hsl(262,85%,50%)");
@@ -138,7 +138,7 @@ HSLA can be parsed from a string in the format "hsla(h, s%, l%, a)" or from a tu
 * s:u32 - saturation(0~100)
 * l:u32 - lightness(0~100)
 * a:f32 - alpha(0~1)
-```
+``` rust
     let mut hsla:HSLA = "hsla(262,85%,79%, 0.7)".try_into().unwrap();
     hsla.set_alpha(0.5);
     assert_eq!(hsla.to_string(), "hsla(262,85%,79%,0.50)");
@@ -154,7 +154,7 @@ HSV can be parsed from a string in the format "hsl(h, s%, v%)" or from a tuple (
 * s:u32 - saturation(0~100)
 * v:u32 - Value(0~100)
 
-```
+``` rust
     use easy_color::{RGB, HSV};
     let mut hsv:HSV = "hsv(262,85%,79%)".try_into().unwrap();
     hsv.set_value(50);
@@ -170,7 +170,7 @@ CMYK can be parsed from a string in the format "cmyk(c,m,y,k)" or from a tuple (
 * m:u8 - magenta value(0~100)
 * y:u8 - yellow value(0~100)
 * k:u8 - black value(0~100)
-```
+``` rust
     use easy_color::{Hex, CMYK};
     let mut cmyk:CMYK = "cmyk(77,34,53,38)".try_into().unwrap();
     cmyk.set_cyan(100);
@@ -182,10 +182,12 @@ CMYK can be parsed from a string in the format "cmyk(c,m,y,k)" or from a tuple (
 
 ### Methods
 Each type of structure has the following methods:
-* fn is_dark(&self) -> bool;
-* fn is_light(&self) -> bool;
-* fn grayscale(&self) -> Self; 
-* fn negate(&self) -> Self;
-* fn mix(&self, other:T, weight:Option<f32>) -> Self;
-* fn darken(&mut self, ratio:f32) -> Self;
-* fn lighten(&mut self, ratio:f32) -> Self;
+``` rust
+    fn is_dark(&self) -> bool;
+    fn is_light(&self) -> bool;
+    fn grayscale(&self) -> Self; 
+    fn negate(&self) -> Self;
+    fn mix(&self, other:T, weight:Option<f32>) -> Self;
+    fn darken(&mut self, ratio:f32) -> Self;
+    fn lighten(&mut self, ratio:f32) -> Self;
+```
