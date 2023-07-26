@@ -1,7 +1,7 @@
 use crate::common::{calc_rgb_with_alpha, rgb_to_cmyk};
 use crate::{ColorError, Hex, HSL, HSLA, HSV, RGB, RGBA};
-use std::fmt::{Display, Formatter};
 use rand::Rng;
+use std::fmt::{Display, Formatter};
 
 /// CMYK can be parsed from a string in the format "cmyk(c,m,y,k)" or from a tuple (c,m,y,k).
 /// * c:u8 - cyan value(0~100)
@@ -37,9 +37,7 @@ impl TryFrom<&str> for CMYK {
             if tmp.len() == 4 {
                 let val = tmp
                     .iter()
-                    .map(|s| s.parse::<u8>())
-                    .filter(|v| v.is_ok())
-                    .map(|v| v.unwrap())
+                    .filter_map(|s| s.parse::<u8>().ok())
                     .collect::<Vec<_>>();
                 if val.len() == 4 {
                     return (val[0], val[1], val[2], val[3]).try_into();
@@ -56,7 +54,7 @@ impl TryFrom<&str> for CMYK {
 impl TryFrom<(u8, u8, u8, u8)> for CMYK {
     type Error = ColorError;
     fn try_from(value: (u8, u8, u8, u8)) -> Result<Self, Self::Error> {
-        return if !(0..=100).contains(&value.0)
+        if !(0..=100).contains(&value.0)
             || !(0..=100).contains(&value.1)
             || !(0..=100).contains(&value.2)
             || !(0..=100).contains(&value.3)
@@ -72,7 +70,7 @@ impl TryFrom<(u8, u8, u8, u8)> for CMYK {
                 y: value.2,
                 k: value.3,
             })
-        };
+        }
     }
 }
 
@@ -167,10 +165,10 @@ impl CMYK {
 
     pub fn random() -> Self {
         let mut rng = rand::thread_rng();
-        let c =  rng.gen_range(0..=100) as u8;
+        let c = rng.gen_range(0..=100) as u8;
         let m = rng.gen_range(0..=100) as u8;
         let y = rng.gen_range(0..=100) as u8;
         let k = rng.gen_range(0..=100) as u8;
-        Self {c, m, y, k}
+        Self { c, m, y, k }
     }
 }

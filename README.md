@@ -60,7 +60,7 @@ This is a very simple and easy-to-use color conversion tool that can easily conv
     let hex_str = hex.to_hex_alpha();
     assert_eq!(hex_str, "#FFDFACD8");
 
-    let hex_str2 = hex.to_hex_alpha();
+    let hex_str2 = hex.to_alpha_hex();
     assert_eq!(hex_str, "#D8FFDFAC");
  ```
  Convert hex to other types, such as:
