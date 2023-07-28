@@ -36,7 +36,7 @@ impl TryFrom<&str> for Hex {
     fn try_from(hex_str: &str) -> Result<Self, Self::Error> {
         let color = hex_str.trim().to_lowercase();
         if color.starts_with('#') {
-            let tmp = color.replace("#", "");
+            let tmp = color.replace('#', "");
             let len = tmp.len();
             if len == 3 {
                 let val = process_hex(tmp.as_str(), 1);

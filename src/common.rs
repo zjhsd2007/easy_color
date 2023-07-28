@@ -53,11 +53,11 @@ pub fn hsl_to_rgb(h: u32, s: u32, l: u32) -> (u8, u8, u8) {
     let m = l - c / 2.0;
     let (mut r, mut g, mut b) = match h {
         n if n < 60 => (c, x, 0.0),
-        n if 60 <= n && n < 120 => (x, c, 0.0),
-        n if 120 <= n && n < 180 => (0.0, c, x),
-        n if 180 <= n && n < 240 => (0.0, x, c),
-        n if 240 <= n && n < 300 => (x, 0.0, c),
-        n if 300 <= n && n < 360 => (c, 0.0, x),
+        n if (60..120).contains(&n) => (x, c, 0.0),
+        n if (120..180).contains(&n) => (0.0, c, x),
+        n if (180..240).contains(&n) => (0.0, x, c),
+        n if (240..300).contains(&n) => (x, 0.0, c),
+        n if (300..360).contains(&n) => (c, 0.0, x),
         _ => (0.0, 0.0, 0.0),
     };
     r = (r + m) * 255.0;
@@ -107,11 +107,11 @@ pub fn hsv_to_rgb(h: u32, s: u32, v: u32) -> (u8, u8, u8) {
     let m = v - c;
     let (mut r, mut g, mut b) = match h {
         n if n < 60 => (c, x, 0.0),
-        n if 60 <= n && n < 120 => (x, c, 0.0),
-        n if 120 <= n && n < 180 => (0.0, c, x),
-        n if 180 <= n && n < 240 => (0.0, x, c),
-        n if 240 <= n && n < 300 => (x, 0.0, c),
-        n if 300 <= n && n < 360 => (c, 0.0, x),
+        n if (60..120).contains(&n) => (x, c, 0.0),
+        n if (120..180).contains(&n) => (0.0, c, x),
+        n if (180..240).contains(&n) => (0.0, x, c),
+        n if (240..300).contains(&n) => (x, 0.0, c),
+        n if (300..360).contains(&n) => (c, 0.0, x),
         _ => (0.0, 0.0, 0.0),
     };
     r = (r + m) * 255.0;
@@ -162,7 +162,6 @@ pub fn process_hex(hex_str: &str, chunk_size: usize) -> Vec<u8> {
         .chunks(chunk_size)
         .map(|c| c.iter().collect::<String>())
         .map(|v| u8::from_str_radix(&v.repeat(2)[0..2], 16))
-        .filter(|v| v.is_ok())
-        .map(|v| v.unwrap())
+        .filter_map(|v| v.ok())
         .collect::<Vec<_>>()
 }

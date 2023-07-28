@@ -1,7 +1,7 @@
 use crate::common::{calc_rgb_with_alpha, rgb_to_hsv};
 use crate::{ColorError, Hex, CMYK, HSL, HSLA, RGB, RGBA};
-use std::fmt::{Display, Formatter};
 use rand::Rng;
+use std::fmt::{Display, Formatter};
 
 /// HSV can be parsed from a string in the format "hsl(h, s%, v%)" or from a tuple (h,s,v).
 /// * h:u32 - Hue(0~360)
@@ -36,8 +36,7 @@ impl TryFrom<&str> for HSV {
                 let val = tmp
                     .iter()
                     .map(|s| s.trim().trim_end_matches('%').parse::<u32>())
-                    .filter(|v| v.is_ok())
-                    .map(|v| v.unwrap())
+                    .filter_map(|v| v.ok())
                     .collect::<Vec<_>>();
                 if val.len() == 3 {
                     return (val[0], val[1], val[2]).try_into();
@@ -54,7 +53,7 @@ impl TryFrom<&str> for HSV {
 impl TryFrom<(u32, u32, u32)> for HSV {
     type Error = ColorError;
     fn try_from(value: (u32, u32, u32)) -> Result<Self, Self::Error> {
-        return if !(0..=360).contains(&value.0)
+        if !(0..=360).contains(&value.0)
             || !(0..=100).contains(&value.1)
             || !(0..=100).contains(&value.2)
         {
@@ -65,7 +64,7 @@ impl TryFrom<(u32, u32, u32)> for HSV {
                 s: value.1,
                 v: value.2,
             })
-        };
+        }
     }
 }
 
@@ -155,6 +154,6 @@ impl HSV {
         let h = rng.gen_range(0..=360) as u32;
         let s = rng.gen_range(0..=100) as u32;
         let v = rng.gen_range(0..=100) as u32;
-        Self {h, s, v}
+        Self { h, s, v }
     }
 }

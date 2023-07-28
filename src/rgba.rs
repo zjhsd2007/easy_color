@@ -33,16 +33,14 @@ impl TryFrom<&str> for RGBA {
         if color.starts_with("rgba(") && color.ends_with(')') {
             let mut val = vec![];
             let mut alpha = None;
-            color = color.replace("rgba(", "").replace(")", "");
+            color = color.replace("rgba(", "").replace(')', "");
             let tmp = color.split(',').collect::<Vec<_>>();
             if tmp.len() == 4 {
                 for (idx, s) in tmp.iter().enumerate() {
                     if idx == 3 {
                         alpha = s.trim().parse::<f32>().ok();
-                    } else {
-                        if let Ok(v) = s.trim().parse::<u8>() {
-                            val.push(v);
-                        }
+                    } else if let Ok(v) = s.trim().parse::<u8>() {
+                        val.push(v);
                     }
                 }
             }
@@ -64,7 +62,7 @@ impl TryFrom<&str> for RGBA {
 impl TryFrom<(u8, u8, u8, f32)> for RGBA {
     type Error = ColorError;
     fn try_from(value: (u8, u8, u8, f32)) -> Result<Self, Self::Error> {
-        return if !(0.0..=1.0).contains(&value.3) {
+        if !(0.0..=1.0).contains(&value.3) {
             Err(ColorError::ValueErr(format!(
                 "RGBA: the alpha value must between 0~1, but got {}.",
                 value.3
@@ -76,7 +74,7 @@ impl TryFrom<(u8, u8, u8, f32)> for RGBA {
                 b: value.2,
             };
             Ok(RGBA { rgb, a: value.3 })
-        };
+        }
     }
 }
 
@@ -90,10 +88,7 @@ impl From<Hex> for RGBA {
 
 impl From<RGB> for RGBA {
     fn from(rgb: RGB) -> Self {
-        Self {
-            rgb,
-            a: 1.0,
-        }
+        Self { rgb, a: 1.0 }
     }
 }
 
@@ -171,21 +166,24 @@ impl RGBA {
     /// hsl.mix(rgba, None).to_string(); // hsl(0,0%,50%)
     /// ```
     ///
-    pub fn mix(&self, other: impl Into<Self>, weight:Option<f32>) -> Self {
-        let rgba:RGBA = other.into();
+    pub fn mix(&self, other: impl Into<Self>, weight: Option<f32>) -> Self {
+        let rgba: RGBA = other.into();
         let p = weight.unwrap_or(0.5);
         let w = 2.0 * p - 1.0;
         let a = rgba.a - self.a;
-        let w1 = if w * a == -1.0 { (w + 1.0) / 2.0 } else {  ((w + a) / (1.0 + w * a) + 1.0) / 2.0};
+        let w1 = if w * a == -1.0 {
+            (w + 1.0) / 2.0
+        } else {
+            ((w + a) / (1.0 + w * a) + 1.0) / 2.0
+        };
         let w2 = 1.0 - w1;
         let r = (w1 * rgba.r as f32 + w2 * self.r as f32) as u8;
         let g = (w1 * rgba.g as f32 + w2 * self.g as f32) as u8;
         let b = (w1 * rgba.b as f32 + w2 * self.b as f32) as u8;
         let a = rgba.a * p + self.a * (1.0 - p);
-        let rgb:RGB = (r,g,b).try_into().unwrap();
-        Self {rgb,a}
+        let rgb: RGB = (r, g, b).try_into().unwrap();
+        Self { rgb, a }
     }
-
 
     /// fade color
     /// * ratio:f32 - the ratio of fading, a value between 0.0 and 1.0
@@ -198,7 +196,7 @@ impl RGBA {
     /// rgba.fade(0.5);
     /// assert_eq!(rgba.to_string(), "rgba(255,255,255,0.40)");
     /// ```
-    pub fn fade(&mut self, ratio:f32) -> &mut Self {
+    pub fn fade(&mut self, ratio: f32) -> &mut Self {
         self.a = (self.a - self.a * ratio).max(0.0).min(1.0);
         self
     }
@@ -213,11 +211,10 @@ impl RGBA {
     /// rgba.opaquer(0.2);
     /// assert_eq!(rgba.to_string(), "rgba(255,255,255,0.96)");
     /// ```
-    pub fn opaquer(&mut self, ratio:f32) -> &mut Self {
+    pub fn opaquer(&mut self, ratio: f32) -> &mut Self {
         self.a = (self.a + self.a * ratio).max(0.0).min(1.0);
         self
     }
-
 
     /// Returns the grayscale mode of the color
     /// ``` rust
@@ -228,7 +225,7 @@ impl RGBA {
     /// ```
     pub fn grayscale(&self) -> Self {
         let v = (self.r as f32 * 0.3 + self.g as f32 * 0.59 + self.b as f32 * 0.11) as u8;
-        (v,v,v, self.a).try_into().unwrap()
+        (v, v, v, self.a).try_into().unwrap()
     }
 
     /// Invert color
@@ -239,17 +236,21 @@ impl RGBA {
     /// assert_eq!(inverted.to_string(), "rgba(160,210,100,0.80)");
     /// ```
     pub fn negate(&self) -> Self {
-        let RGB {mut r, mut g, mut b} = self.rgb;
+        let RGB {
+            mut r,
+            mut g,
+            mut b,
+        } = self.rgb;
         r = 255 - r;
         g = 255 - g;
         b = 255 - b;
-        let rgb:RGB = (r,g,b).try_into().unwrap();
-        Self { rgb, a:self.a}
+        let rgb: RGB = (r, g, b).try_into().unwrap();
+        Self { rgb, a: self.a }
     }
 
     pub fn random() -> Self {
         let rgb = RGB::random();
         let a = (rand::random::<f32>() * 100.0_f32).round() / 100.0;
-        Self {rgb, a}
+        Self { rgb, a }
     }
 }

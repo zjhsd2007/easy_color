@@ -32,21 +32,21 @@ impl TryFrom<&str> for HSLA {
         if color.starts_with("hsla(") && color.ends_with(')') {
             let mut val = vec![];
             let mut alpha = None;
-            color = color.replace("hsla(", "").replace(")", "");
+            color = color.replace("hsla(", "").replace(')', "");
             let tmp = color.split(',').collect::<Vec<_>>();
             if tmp.len() == 4 {
                 for (idx, s) in tmp.iter().enumerate() {
                     if idx == 3 {
                         alpha = s.trim().parse::<f32>().ok();
-                    } else {
-                        if let Ok(v) = s.trim().trim_end_matches('%').parse::<u32>() {
-                            val.push(v);
-                        }
+                    } else if let Ok(v) = s.trim().trim_end_matches('%').parse::<u32>() {
+                        val.push(v);
                     }
                 }
             }
-            if val.len() == 3 && alpha.is_some() {
-                return (val[0], val[1], val[2], alpha.unwrap()).try_into();
+            if let Some(alpha) = alpha {
+                if val.len() == 3 {
+                    return (val[0], val[1], val[2], alpha).try_into();
+                }
             }
         }
         Err(ColorError::FormatErr(format!(
@@ -59,7 +59,7 @@ impl TryFrom<&str> for HSLA {
 impl TryFrom<(u32, u32, u32, f32)> for HSLA {
     type Error = ColorError;
     fn try_from(value: (u32, u32, u32, f32)) -> Result<Self, Self::Error> {
-        return if !(0..=360).contains(&value.0)
+        if !(0..=360).contains(&value.0)
             || !(0..=100).contains(&value.1)
             || !(0..=100).contains(&value.2)
             || !(0.0..=1.0).contains(&value.3)
@@ -72,7 +72,7 @@ impl TryFrom<(u32, u32, u32, f32)> for HSLA {
                 l: value.2,
             };
             Ok(HSLA { hsl, a: value.3 })
-        };
+        }
     }
 }
 impl From<Hex> for HSLA {
@@ -103,10 +103,7 @@ impl From<RGBA> for HSLA {
 
 impl From<HSL> for HSLA {
     fn from(hsl: HSL) -> Self {
-        Self {
-            hsl: hsl.clone(),
-            a: 1.0,
-        }
+        Self { hsl, a: 1.0 }
     }
 }
 
@@ -157,6 +154,6 @@ impl HSLA {
     pub fn random() -> Self {
         let hsl = HSL::random();
         let a = (rand::random::<f32>() * 100.0_f32).round() / 100.0;
-        Self {hsl, a}
+        Self { hsl, a }
     }
 }

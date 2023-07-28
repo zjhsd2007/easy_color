@@ -32,7 +32,7 @@ impl TryFrom<&str> for CMYK {
     fn try_from(cmyk_str: &str) -> Result<Self, Self::Error> {
         let mut color = cmyk_str.trim().to_lowercase();
         if color.starts_with("cmyk(") && color.ends_with(')') {
-            color = color.replace("cmyk(", "").replace(")", "");
+            color = color.replace("cmyk(", "").replace(')', "");
             let tmp = color.split(',').collect::<Vec<_>>();
             if tmp.len() == 4 {
                 let val = tmp

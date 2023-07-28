@@ -33,14 +33,13 @@ impl TryFrom<&str> for RGB {
     fn try_from(rgb_str: &str) -> Result<Self, Self::Error> {
         let mut color = rgb_str.trim().to_lowercase();
         if color.starts_with("rgb(") && color.ends_with(')') {
-            color = color.replace("rgb(", "").replace(")", "");
+            color = color.replace("rgb(", "").replace(')', "");
             let tmp = color.split(',').collect::<Vec<_>>();
             if tmp.len() == 3 {
                 let val = tmp
                     .iter()
                     .map(|s| s.trim().parse::<u8>())
-                    .filter(|v| v.is_ok())
-                    .map(|v| v.unwrap())
+                    .filter_map(|v| v.ok())
                     .collect::<Vec<_>>();
                 if val.len() == 3 {
                     return (val[0], val[1], val[2]).try_into();
@@ -161,6 +160,6 @@ impl RGB {
         let r = rand::random::<u8>();
         let g = rand::random::<u8>();
         let b = rand::random::<u8>();
-        Self {r,g,b}
+        Self { r, g, b }
     }
 }
